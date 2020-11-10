@@ -1,0 +1,21 @@
+.CardList {
+  display: grid;
+  grid-template-columns: repeat(3, 290px);
+  gap: 20px;
+
+  padding: 30px 80px;
+
+  list-style: none;
+}
+
+@media screen and (max-width: 991px) {
+  .CardList {
+    grid-template-columns: repeat(2, 270px);
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .CardList {
+    grid-template-columns: repeat(1, 100%);
+  }
+}
