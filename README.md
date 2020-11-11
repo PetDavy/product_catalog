@@ -1,5 +1,5 @@
 # Product Catalog
-# Click to see [DEMO LINK](https://PetDavy.github.io/react_dynamic-list-of-goods/)
+# Click to see [DEMO](https://PetDavy.github.io/product_catalog/)
 
 Please implement following task using React and Redux/MobX
 The result expected to be ONE repository on GitHub/GitLab/Bitbucket/etc
