@@ -1,27 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { ProductShape } from '../shapes/ProductShape';
+import { useSelector } from 'react-redux';
 import { Card } from '../Card';
 import './CardList.css';
 
-export const CardList = ({ products, removeProdact, setPinedPropductId }) => (
-  <ul className="CardList">
-    {
-      products.map(product => (
-        <li key={product.id}>
-          <Card
-            product={product}
-            setPinedPropductId={setPinedPropductId}
-            removeProdact={removeProdact}
-          />
-        </li>
-      ))
-    }
-  </ul>
-);
+export const CardList = () => {
+  const products = useSelector(({ productList }) => productList.sortedProducts);
 
-CardList.propTypes = {
-  products: PropTypes.arrayOf(PropTypes.shape(ProductShape)).isRequired,
-  removeProdact: PropTypes.func.isRequired,
-  setPinedPropductId: PropTypes.func.isRequired,
+  if (!products.length) {
+    return <h1 className="display-3 mt-5 text-center">There is no product</h1>;
+  }
+
+  return (
+    <ul className="CardList">
+      {
+        products.map(product => (
+          <li key={product.id}>
+            <Card
+              product={product}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  );
 };

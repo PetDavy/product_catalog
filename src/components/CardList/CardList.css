@@ -1,6 +1,6 @@
 .CardList {
   display: grid;
-  grid-template-columns: repeat(3, 290px);
+  grid-template-columns: repeat(3, 23vw);
   gap: 20px;
 
   padding: 30px 80px;
@@ -10,7 +10,7 @@
 
 @media screen and (max-width: 991px) {
   .CardList {
-    grid-template-columns: repeat(2, 270px);
+    grid-template-columns: repeat(2, 265px);
   }
 }
 

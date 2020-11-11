@@ -1,32 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { removeProduct, sortProducts, pinProduct } from '../../actions';
 import { ProductShape } from '../shapes/ProductShape';
+import './Card.css';
 
-export const Card = ({ product, removeProdact, setPinedPropductId }) => {
-  const { id, img, name, description, price } = product;
+export const Card = ({ product }) => {
+  const { id, img, title, description, price } = product;
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(removeProduct(id));
+    dispatch(sortProducts());
+  };
+
+  const handlePin = () => {
+    dispatch(pinProduct(id));
+    dispatch(sortProducts());
+  };
 
   return (
-    <div className="card">
-      <img src={img} className="card-img-top" alt={name} />
+    <div className="Card card">
+      <img src={img} className="card-img-top" alt={title} />
       <div className="card-body">
-        <h5 className="card-title">{name}</h5>
+        <h5 className="card-title">{title}</h5>
         <p className="card-text">{description}</p>
-        <p className="card-text">{`Price: ${price}`}</p>
+        <p className="card-text">{`Price: ${price} $`}</p>
 
         <button
           type="button"
           className="btn btn-danger"
-          onClick={() => removeProdact(id)}
+          onClick={handleDelete}
         >
           Delete
         </button>
 
         <button
           type="button"
-          className="btn btn-primary"
-          onClick={() => setPinedPropductId(id)}
+          className="btn btn-outline-primary float-right"
+          onClick={handlePin}
         >
-          Pin the Prodact
+          Pin product
         </button>
       </div>
     </div>
@@ -35,6 +49,4 @@ export const Card = ({ product, removeProdact, setPinedPropductId }) => {
 
 Card.propTypes = {
   product: PropTypes.shape(ProductShape).isRequired,
-  removeProdact: PropTypes.func.isRequired,
-  setPinedPropductId: PropTypes.func.isRequired,
 };

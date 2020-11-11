@@ -1,35 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { addProduct, sortProducts, clearForm } from '../../actions';
+
 import { InputField } from '../InputField';
 import './AddProductForm.css';
 
-export const AddProductForm = ({ addProdact, lastId, isOpen, toggleForm }) => {
-  const [img, setImg] = useState('');
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [errors, setErrors] = useState({});
+export const AddProductForm = ({ isOpen, toggleForm }) => {
+  const newProduct = useSelector(state => state.newProduct);
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (Object.values(errors).some(error => error)) {
+    if (Object.values(newProduct.errors).some(error => error)) {
       return;
     }
 
-    addProdact({
-      id: lastId,
-      img,
-      name,
-      description,
-      price: Number(price),
-    });
-
-    setImg('');
-    setName('');
-    setDescription('');
-    setPrice(0);
+    dispatch(addProduct({
+      ...newProduct,
+    }));
+    dispatch(sortProducts());
+    dispatch(clearForm());
 
     toggleForm(false);
   };
@@ -45,50 +38,25 @@ export const AddProductForm = ({ addProdact, lastId, isOpen, toggleForm }) => {
         className="btn-toggleForm"
         onClick={() => toggleForm(!isOpen)}
       >
-        {isOpen ? 'X' : '+'}
+        {isOpen
+          ? <i className="fas fa-times" />
+          : <i className="fas fa-plus" />}
       </button>
 
       <h5 className="display-5 lead mb-4 text-center"> Add product details</h5>
 
       <form onSubmit={handleSubmit}>
 
-        <InputField
-          value={img}
-          name="image"
-          setValue={setImg}
-          errors={errors}
-          setErrors={setErrors}
-        />
-
-        <InputField
-          value={name}
-          name="title"
-          setValue={setName}
-          errors={errors}
-          setErrors={setErrors}
-        />
-
-        <InputField
-          value={description}
-          name="description"
-          setValue={setDescription}
-          errors={errors}
-          setErrors={setErrors}
-        />
-
-        <InputField
-          value={price}
-          name="price"
-          setValue={setPrice}
-          errors={errors}
-          setErrors={setErrors}
-        />
+        <InputField name="img" />
+        <InputField name="title" />
+        <InputField name="description" />
+        <InputField name="price" />
 
         <button
           type="submit"
           className="btn btn-primary w-100 mt-4"
         >
-          Add Prodact
+          Add New Prodact
         </button>
       </form>
     </div>
@@ -96,8 +64,6 @@ export const AddProductForm = ({ addProdact, lastId, isOpen, toggleForm }) => {
 };
 
 AddProductForm.propTypes = {
-  addProdact: PropTypes.func.isRequired,
-  lastId: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggleForm: PropTypes.func.isRequired,
 };

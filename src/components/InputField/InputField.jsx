@@ -1,26 +1,21 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import './InputField.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeValue, validateValue } from '../../actions';
 
-export const InputField = ({ value, name, setValue, errors, setErrors }) => {
+export const InputField = ({ name }) => {
+  const values = useSelector(state => state.newProduct);
+  const errors = useSelector(state => state.newProduct.errors);
+
+  const dispatch = useDispatch();
+
   const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+    const { value } = event.target;
 
-  const validateValue = () => {
-    if (!value) {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        [name]: `Please add ${name}`,
-      }));
-
-      return;
-    }
-
-    setErrors(prevErrors => ({
-      ...prevErrors,
-      [name]: '',
+    dispatch(changeValue({
+      name,
+      value,
     }));
   };
 
@@ -31,23 +26,23 @@ export const InputField = ({ value, name, setValue, errors, setErrors }) => {
           ? (
             <textarea
               name={name}
-              value={value}
+              value={values[name]}
               className="form-control"
-              placeholder={`Please add ${name}`}
+              placeholder={`Add ${name}`}
               onChange={handleChange}
             />
           ) : (
             <input
               type={name === 'price' ? 'number' : 'text'}
               name={name}
-              value={value}
+              value={values[name]}
               className={classNames('form-control', {
                 'is-invalid': errors[name],
               })}
               aria-describedby="input-feedback"
-              placeholder={`Please add ${name}`}
+              placeholder={`Please add ${name} ${name === 'img' ? 'url' : ''}`}
               onChange={handleChange}
-              onBlur={validateValue}
+              onBlur={() => dispatch(validateValue(name))}
               required
             />
           )
@@ -63,14 +58,5 @@ export const InputField = ({ value, name, setValue, errors, setErrors }) => {
 };
 
 InputField.propTypes = {
-  value: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  setValue: PropTypes.func.isRequired,
-  errors: PropTypes.shape({
-    img: PropTypes.string,
-    title: PropTypes.string,
-    description: PropTypes.string,
-    price: PropTypes.string,
-  }).isRequired,
-  setErrors: PropTypes.func.isRequired,
 };

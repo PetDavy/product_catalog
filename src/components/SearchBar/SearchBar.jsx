@@ -1,26 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { search } from '../../actions';
 import './SearchBar.css';
 
-export const SearchBar = ({ value, setValue }) => {
+export const SearchBar = () => {
+  const imputValue = useSelector(state => state.searchValue);
+  const dispatch = useDispatch();
+
   const handleChange = (event) => {
-    setValue(event.target.value);
+    const { value } = event.target;
+
+    dispatch(search(value));
   };
 
   return (
-    <div className="SearchBar">
+    <div className="SearchBar mt-4">
       <input
-        value={value}
+        value={imputValue}
         type="text"
         placeholder="Shearch the product"
-        className="SearchBar__input"
+        className="SearchBar-input"
         onChange={handleChange}
       />
     </div>
   );
-};
-
-SearchBar.propTypes = {
-  value: PropTypes.string.isRequired,
-  setValue: PropTypes.func.isRequired,
 };
